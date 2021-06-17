@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/helmet/v2"
 )
 
 func main() {
@@ -17,6 +18,7 @@ func main() {
 	//middlewares
 	app.Use(logger.New(logger.ConfigDefault))
 	app.Use(recover.New())
+	app.Use(helmet.New())
 
 	//routes
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -28,13 +30,13 @@ func main() {
 		return c.SendString(msg)
 	})
 
+	app.Get("/json", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{"success": "true", "message": "messaggio"})
+	})
+
 	//404 handler
 	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404)
-	})
-
-	app.Get("/json", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"success": "true", "message": "messaggio"})
 	})
 
 	//server start
