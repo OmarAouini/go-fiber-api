@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -31,5 +32,5 @@ func main() {
 	})
 
 	//server start
-	app.Listen(":3000")
+	log.Fatal(app.Listen(":3000"))
 }
