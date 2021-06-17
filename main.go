@@ -27,7 +27,7 @@ func main() {
 	})
 
 	//404 handler
-	app.Use(func(c fiber.Ctx) error {
+	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404)
 	})
 
