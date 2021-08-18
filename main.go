@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
+	"github.com/OmarAouini/go-fiber-api/config"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -20,25 +20,22 @@ func main() {
 	app.Use(recover.New())
 	app.Use(helmet.New())
 
-	//routes
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("hello go fiber!")
-	})
-
-	app.Post("/:name", func(c *fiber.Ctx) error {
-		msg := fmt.Sprintf("hello, %s", c.Params("name"))
-		return c.SendString(msg)
-	})
-
-	app.Get("/json", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"success": "true", "message": "messaggio"})
-	})
+	//routes mapping
+	config.ConfigRoutes(app)
 
 	//404 handler
 	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404)
 	})
 
+	//content-type check only json allowed
+	app.Use(func(c *fiber.Ctx) error {
+		if c.Is("json") {
+			return c.Next()
+		}
+		return c.SendString("Only JSON allowed!")
+	})
+
 	//server start
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":8080"))
 }
