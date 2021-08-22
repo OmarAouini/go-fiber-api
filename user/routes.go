@@ -1,4 +1,4 @@
-package person
+package user
 
 import (
 	"fmt"
@@ -10,13 +10,13 @@ import (
 
 //find all people
 func Get_all(c *fiber.Ctx) error {
-	p := Person{ID: uuid.New(), Name: "pippo", Age: 22, CreatedAt: time.Now().Local().UTC()}
-	pp := Person{ID: uuid.New(), Name: "pluto", Age: 34, CreatedAt: time.Now().Local().UTC()}
-	ppp := Person{ID: uuid.New(), Name: "topolino", Age: 56, CreatedAt: time.Now().Local().UTC()}
-	list := make([]Person, 3)
-	list = append(list, p)
-	list = append(list, pp)
-	list = append(list, ppp)
+	u := User{ID: uuid.New(), Name: "pippo", CreatedAt: time.Now().Local().UTC()}
+	uu := User{ID: uuid.New(), Name: "pluto", CreatedAt: time.Now().Local().UTC()}
+	uuu := User{ID: uuid.New(), Name: "topolino", CreatedAt: time.Now().Local().UTC()}
+	list := make([]User, 3)
+	list = append(list, u)
+	list = append(list, uu)
+	list = append(list, uuu)
 	return c.JSON(list)
 }
 

@@ -1,11 +1,11 @@
 package config
 
 import (
-	"github.com/OmarAouini/go-fiber-api/person"
+	"github.com/OmarAouini/go-fiber-api/user"
 	"github.com/gofiber/fiber/v2"
 )
 
-//function used to config routes,
+//function used to config api routes,
 //add here new api endpoints
 func ConfigRoutes(app *fiber.App) {
 
@@ -21,9 +21,13 @@ func ConfigRoutes(app *fiber.App) {
 
 	//users
 	users := api.Group("/users")
-	users.Get("/", person.Get_all)
-	users.Get("/name/:name", person.Find)
-	users.Post("/create", person.Create)
-	users.Put("/update/:name", person.Update)
-	users.Delete("/delete/:name", person.Delete)
+	users.Get("/", user.Get_all)
+	users.Get("/name/:name", user.Find)
+	users.Post("/create", user.Create)
+	users.Put("/update/:name", user.Update)
+	users.Delete("/delete/:name", user.Delete)
+
+	//products
+	//products := api.Group("/products")
+	//products.Get("/", prodotti.Get_all)
 }
