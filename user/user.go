@@ -1,27 +1,25 @@
 package user
 
 import (
+	"database/sql"
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
-	"time"
+	"fmt"
+	"os/user"
 
-	"github.com/google/uuid"
-	"gorm.io/gorm"
+	"github.com/OmarAouini/go-fiber-api/database"
+	"github.com/gofiber/fiber/v2"
 )
 
 //user struct
 type User struct {
-	gorm.Model
-	ID        uuid.UUID `db:"id" json:"id" validate:"required,uuid"`
-	Name      string    `db:"name" json:"name"`
-	Surname   string    `db:"surname" json:"surname"`
-	Username  string    `db:"username" json:"username"`
-	Password  string    `db:"password" json:"password"`
-	Email     string    `db:"email" json:"email"`
-	CreatedAt time.Time `db:"created_at" json:"created_at"`
-	UpdatedAt time.Time `db:"updated_at" json:"updated_at"`
-	LastLogin time.Time `db:"last_login" json:"last_login"`
+	ID       int            `gorm:"primary_key"`
+	Name     sql.NullString `gorm:"column:name" json:"name"`
+	Surname  sql.NullString `gorm:"column:surname" json:"surname"`
+	Username sql.NullString `gorm:"column:username" json:"username"`
+	Password sql.NullString `gorm:"column:password" json:"password"`
+	Email    sql.NullString `gorm:"column:email" json:"email"`
 }
 
 // Value make the User struct implement the driver.Valuer interface.
@@ -38,4 +36,41 @@ func (u *User) Scan(value interface{}) error {
 		return errors.New("type assertion to []byte failed")
 	}
 	return json.Unmarshal(j, &u)
+}
+
+//CRUD
+
+//find all users
+func Get_all(c *fiber.Ctx) error {
+	var users []user.User
+	database.Pool.Find(&users)
+	if len(users) == 0 {
+		return c.JSON([]User{})
+	}
+	fmt.Println(c.JSON(users))
+	return c.JSON(users)
+}
+
+//find single user
+func Find(c *fiber.Ctx) error {
+	var user User
+	var username = c.Params("username")
+	database.Pool.First(user.Username.String == username)
+	return c.JSON(user)
+}
+
+//create a new user
+func Create(c *fiber.Ctx) error {
+	// var user User
+	return c.JSON("dcc")
+}
+
+//update an existing user
+func Update(c *fiber.Ctx) error {
+	return c.JSON("vcdx")
+}
+
+//delete an existing user
+func Delete(c *fiber.Ctx) error {
+	return c.JSON("sdvsd")
 }
